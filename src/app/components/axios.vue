@@ -2,7 +2,7 @@
   <div>
     <h3>{{ name }}</h3>
     <div>{{ errorMessage }}</div>
-    <!-- <div>{{ token }}</div> -->
+    <div>{{ token }}</div>
     <label for="createPost"></label>
     <input
       id="createPost"
@@ -14,10 +14,16 @@
       <input
         type="text"
         :value="post.title"
-        @keyup.enter="updatePost($event, post.id)"
+        @keyup.enter="updatePost1($event, post.id)"
       />
-      {{ post.title }} - <small>{{ post.content }}</small
-      >&nbsp;
+      <input
+        type="text"
+        :value="post.content"
+        @keyup.enter="updatePost2($event, post.id)"
+      />
+      {{ post.title }} - <small>{{ post.content }}</small> -{{
+        post.user.name
+      }}&nbsp;
       <button @click="deletePost(post.id)">删除</button>
     </div>
   </div>
@@ -50,14 +56,13 @@ export default {
     try {
       const response = await apiHttpClient.post('/login', this.user);
       this.token = response.data.token;
-
       console.log(response.data);
     } catch (error) {
       this.errorMessage = error.message;
     }
   },
   // created() {
-  // 	axios.get('http://192.168.10.101:3000/posts');
+  // 	axios.get('http://192.168.10.101:3000/posts')
   // 				.then(response => {
   // 					console.log(response);
   // 					this.posts = response.data;
@@ -69,6 +74,7 @@ export default {
   // 					this.errorMessage = error.message;
   // 				})
   // }
+
   methods: {
     async getPosts() {
       try {
@@ -101,6 +107,7 @@ export default {
           '/posts',
           {
             title: this.title,
+            // content: this.content,
           },
           {
             headers: {
@@ -117,7 +124,7 @@ export default {
         this.errorMessage = error.message;
       }
     },
-    async updatePost(event, postId) {
+    async updatePost1(event, postId) {
       console.log(event.target.value);
       console.log(postId);
 
@@ -126,6 +133,28 @@ export default {
           `posts/${postId}`,
           {
             title: event.target.value,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+          },
+        );
+
+        this.getPosts();
+      } catch (error) {
+        this.errorMessage = error.message;
+      }
+    },
+    async updatePost2(event, postId) {
+      console.log(event.target.value);
+      console.log(postId);
+
+      try {
+        await apiHttpClient.patch(
+          `posts/${postId}`,
+          {
+            content: event.target.value,
           },
           {
             headers: {

@@ -3,7 +3,8 @@ import Index from './components/index.vue';
 import About from './components/about.vue';
 import VuexPage from './components/vuex.vue';
 import ReactSystem from './components/ReactSystem.vue';
-import Axios from './components/axios.vue'
+import Axios from './components/axios.vue';
+import test from "./components/axiostest.vue";
 //@表示src
 import postRoutes from '@/app/post/post.routes';
 //定义路由
@@ -47,7 +48,12 @@ const routes: Array<RouteRecordRaw> = [
 		name: 'Axios',
 		component: Axios
 	},
-	...postRoutes
+	...postRoutes,
+	{
+		path: '/test',
+		name: 'test',
+		component: test
+	}
 ];
 // 创建路由器
 const router = createRouter({

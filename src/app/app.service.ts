@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://192.168.10.101:3000';
+axios.defaults.baseURL = 'http://localhost:3000';
 
 // 请求拦截器
 axios.interceptors.request.use(
+	// 正常请求
 	config => {
 		console.log('axios 请求拦截器', config);
 
@@ -26,10 +27,9 @@ axios.interceptors.response.use(
 	}
 );
 
-//axios实例(可以单独配置)
-
+//创建axios实例(可以单独配置)
 const apiHttpClient = axios.create({
-	baseURL: 'http://192.168.10.101:3000'
+	baseURL: 'http://localhost:3000'
 });
 
 export { axios, apiHttpClient };
