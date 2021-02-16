@@ -1,14 +1,30 @@
 <template>
   <div>
     <h3>{{ name }}</h3>
+
+    <user-login
+      v-if="!isLoggedIn"
+      @login-success="onLoginSuccess"
+      @login-error="onLoginError"
+    ></user-login>
     <div>{{ errorMessage }}</div>
-    <div>{{ token }}</div>
+
+    <div v-if="currentUser">
+      <div>
+        {{ currentUser.name }}
+      </div>
+      <button @click="logout">退出</button>
+    </div>
+
+    <!-- <div>{{ token }}</div> -->
     <label for="createPost"></label>
     <input
+      v-if="isLoggedIn"
       id="createPost"
       type="text"
       v-model="title"
       @keyup.enter="createPost"
+      placeholder="输入内容标题"
     />
     <div v-for="post in posts" :key="post.id">
       <input
@@ -33,33 +49,54 @@
 // import axios from 'axios';
 // import { axios } from '@/app/app.service';
 import { apiHttpClient } from '@/app/app.service';
+import UserLogin from '../user/components/user-login';
 
 export default {
+  components: {
+    UserLogin,
+  },
   data() {
     return {
-      name: '法外狂徒张三',
+      name: 'AXIOS & AUTH',
       posts: [],
       errorMessage: '',
-      user: {
-        name: '张三',
-        password: '123456',
-      },
+      // user: {
+      //   name: '张三',
+      //   password: '123456',
+      // },
       token: '',
       title: '',
+      currentUser: null,
     };
+  },
+  // 计算属性
+  computed: {
+    isLoggedIn() {
+      return this.token ? true : false;
+    },
   },
   async created() {
     this.getPosts();
 
+    const tid = localStorage.getItem('tid');
+    const uid = localStorage.getItem('uid');
+
+    if (tid) {
+      this.token = tid;
+    }
+    if (uid) {
+      this.getCurrentUser(uid);
+    }
+
     // 用户登录
 
-    try {
-      const response = await apiHttpClient.post('/login', this.user);
-      this.token = response.data.token;
-      console.log(response.data);
-    } catch (error) {
-      this.errorMessage = error.message;
-    }
+    // try {
+    //   const response = await apiHttpClient.post('/login', this.user);
+    //   this.token = response.data.token;
+    //   console.log(response.data);
+    // } catch (error) {
+    //   this.errorMessage = error.message;
+    // }
   },
   // created() {
   // 	axios.get('http://192.168.10.101:3000/posts')
@@ -76,6 +113,32 @@ export default {
   // }
 
   methods: {
+    logout() {
+      this.token = '';
+      this.currentUser = null;
+
+      localStorage.removeItem('tid');
+      localStorage.removeItem('uid');
+    },
+    async getCurrentUser(userId) {
+      try {
+        const response = await apiHttpClient.get(`/users/${userId}`);
+
+        this.currentUser = response.data;
+      } catch (error) {
+        this.errorMessage = error.message;
+      }
+    },
+    onLoginSuccess(data) {
+      this.token = data.token;
+      this.getCurrentUser(data.id);
+
+      localStorage.setItem('tid', data.token);
+      localStorage.setItem('uid', data.id);
+    },
+    onLoginError(error) {
+      this.errorMessage = error.data.message;
+    },
     async getPosts() {
       try {
         // const response = await axios.get('/posts', {

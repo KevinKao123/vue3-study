@@ -4,7 +4,7 @@ import About from './components/about.vue';
 import VuexPage from './components/vuex.vue';
 import ReactSystem from './components/ReactSystem.vue';
 import Axios from './components/axios.vue';
-import test from "./components/axiostest.vue";
+import Auth from "./components/auth.vue";
 //@表示src
 import postRoutes from '@/app/post/post.routes';
 //定义路由
@@ -50,9 +50,9 @@ const routes: Array<RouteRecordRaw> = [
 	},
 	...postRoutes,
 	{
-		path: '/test',
-		name: 'test',
-		component: test
+		path: '/auth',
+		name: 'Auth',
+		component: Auth
 	}
 ];
 // 创建路由器

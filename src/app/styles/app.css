@@ -1,4 +1,3 @@
-
 button {
   margin: 4px;
 }
@@ -10,6 +9,7 @@ button {
   color: plum;
 }
 input[type='text'],
+input[type='password'],
 textarea,
 select {
   padding: 4px 8px;
@@ -20,28 +20,28 @@ select {
 label {
   margin-left: 4px;
 }
-page{
-	padding: 2rem;
+page {
+  padding: 2rem;
 }
-.pageHeader{
-	display: flex;
-	align-items: center;
-	border-bottom:1px solid #e1e1e1;
+.pageHeader {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e1e1e1;
 }
-.brand{
-	margin-right: 2rem;
+.brand {
+  margin-right: 2rem;
 }
-.menu-item{
-	display: inline-block;
-	text-decoration: none;
-	color: #585858;
-	margin: 8px;
-	padding: 0.5rem 1rem;
+.menu-item {
+  display: inline-block;
+  text-decoration: none;
+  color: #585858;
+  margin: 8px;
+  padding: 0.5rem 1rem;
 }
-.pageBody{
-	margin: 1.5rem;
+.pageBody {
+  margin: 1.5rem;
 }
-.router-link-active{
-	color: #505050;
-	background-color: #eee;
+.router-link-active {
+  color: #505050;
+  background-color: #eee;
 }
